@@ -1,6 +1,6 @@
 # Arena
 
-[![NPM](https://img.shields.io/npm/v/bull-arena.svg)](https://www.npmjs.com/package/bull-arena) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier) [![NPM downloads](https://img.shields.io/npm/dm/bull-arena)](https://www.npmjs.com/package/bull-arena) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+[![NPM](https://img.shields.io/npm/v/@slite/bull-arena.svg)](https://www.npmjs.com/package/@slite/bull-arena) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier) [![NPM downloads](https://img.shields.io/npm/dm/@slite/bull-arena)](https://www.npmjs.com/package/@slite/bull-arena) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 An intuitive Web GUI for [Bee Queue](https://github.com/bee-queue/bee-queue), [Bull](https://github.com/optimalbits/bull) and [BullMQ](https://github.com/taskforcesh/bullmq). Built on Express so you can run Arena standalone, or mounted in another app as middleware.
 
@@ -22,7 +22,7 @@ For a quick introduction to the motivations for creating Arena, read _[Interacti
 Arena accepts the following options:
 
 ```js
-const Arena = require('bull-arena');
+const Arena = require('@slite/bull-arena');
 
 // Mandatory import of queue library.
 const Bee = require('bee-queue');
@@ -132,13 +132,13 @@ Usage:
 In project folder:
 
 ```shell
-$ npm install bull-arena
+$ npm install @slite/bull-arena
 ```
 
 In router.js:
 
 ```js
-const Arena = require('bull-arena');
+const Arena = require('@slite/bull-arena');
 
 const express = require('express');
 const router = express.Router();
@@ -174,7 +174,7 @@ router.use('/', arena);
 ##### Example config (for bull)
 
 ```js
-import Arena from 'bull-arena';
+import Arena from '@slite/bull-arena';
 import Bull from 'bull';
 
 const arenaConfig = Arena({
@@ -221,7 +221,7 @@ app.use('/', arenaConfig);
 ##### Example config (for bullmq)
 
 ```js
-import Arena from 'bull-arena';
+import Arena from '@slite/bull-arena';
 import { Queue, FlowProducer } from "bullmq";
 
 const arenaConfig = Arena({

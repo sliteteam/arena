@@ -1,8 +1,8 @@
 {
-  "name": "bull-arena",
-  "description": "An interactive UI dashboard for Bee Queue",
+  "name": "@slite/bull-arena",
+  "description": "An interactive UI dashboard for Bull, Bee Queue and BullMQ",
   "main": "index.js",
-  "author": "Mixmax <hello@mixmax.com>",
+  "author": "Slite <dev@slite.com>",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.20.0",
@@ -67,6 +67,9 @@
     "bee",
     "bullmq"
   ],
-  "repository": "https://github.com/bee-queue/arena.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sliteteam/arena.git"
+  },
   "version": "4.5.1"
 }
