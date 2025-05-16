@@ -13,18 +13,7 @@ async function handler(req, res) {
       message: 'Group functionality not available for this queue',
     });
   }
-
-  // Get the appBasePath to ensure we include any prefix like '/arena'
-  const appBasePath = req.app.locals.appBasePath || '';
-
-  // Extract the base URL path without the 'groups' part
-  const baseUrlWithoutGroups = req.baseUrl.substring(
-    0,
-    req.baseUrl.lastIndexOf('/groups')
-  );
-
-  // Combine the appBasePath with the baseUrlWithoutGroups to ensure correct path
-  const basePath = appBasePath + baseUrlWithoutGroups;
+  const basePath = req.baseUrl;
 
   if (!queue) {
     return res.status(404).render('dashboard/templates/queueNotFound', {
