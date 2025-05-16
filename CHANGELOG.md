@@ -1,3 +1,9 @@
+## [4.6.0](https://github.com/sliteteam/arena/compare/v4.5.1...v4.6.0) (2025-05-16)
+
+### Features
+
+- Add Group Support ([e3783c3](https://github.com/sliteteam/arena/commit/e3783c3e2ca86423eb0e986cb45d111fb472ace7))
+
 ### [4.5.1](https://github.com/bee-queue/arena/compare/v4.5.0...v4.5.1) (2025-04-28)
 
 ### Bug Fixes
