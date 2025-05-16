@@ -1,4 +1,6 @@
 const QueueHelpers = require('../helpers/queueHelpers');
+const JobHelpers = require('../helpers/jobHelpers');
+const GroupHelpers = require('../helpers/groupHelpers');
 
 async function handler(req, res) {
   const {queueName, queueHost} = req.params;
@@ -29,6 +31,13 @@ async function handler(req, res) {
     isPaused = await QueueHelpers.isPaused(queue);
   }
 
+  let groups = null;
+  let groupsCount = 0;
+  if (queue.IS_BULLMQ_PRO) {
+    groupsCount = await queue.getGroupsCount();
+    groups = await GroupHelpers.getQueueGroups(queue);
+  }
+
   return res.render('dashboard/templates/queueDetails', {
     basePath,
     isPaused,
@@ -36,9 +45,12 @@ async function handler(req, res) {
     queueHost,
     queueIsBee: !!queue.IS_BEE,
     queueIsBullMQ: !!queue.IS_BULLMQ,
+    queueIsBullMQPro: !!queue.IS_BULLMQ_PRO,
     hasFlows: Flows.hasFlows(),
     jobCounts,
+    groupsCount,
     stats,
+    groups,
   });
 }
 

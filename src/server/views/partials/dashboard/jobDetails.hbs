@@ -141,17 +141,26 @@
 <div class="panel with-nav-tabs panel-primary">
   <ul class="nav nav-tabs nav-justified">
     <li class="active"><a href="#tab1primary" data-toggle="tab">View</a></li>
+    {{#if groupInfo}}<li><a class="text-white" href="#tab3primary" data-toggle="tab">Group Info</a></li>{{/if}}
     <li><a class="text-white" href="#tab2primary" data-toggle="tab">Edit</a></li>
   </ul>
   <div class="panel-body">
     <div class="tab-content">
       <div class="tab-pane fade in active" id="tab1primary">
-{{/if}}
-{{/unless}}
-      <pre><code class="json">{{json this.data true}}</code></pre>
-{{#unless queue.IS_BEE}}
-{{#if view }}
+        <pre><code class="json">{{json this.data true}}</code></pre>
       </div>
+      {{#if groupInfo}}
+      <div class="tab-pane fade" id="tab3primary">
+        <div class="row">
+          <div class="col-sm-12">
+            <ul class="list-group">
+              <li class="list-group-item"><strong>Group ID:</strong> <a href="{{basePath}}/{{encodeURI queueHost}}/{{encodeURI queueName}}/groups/{{encodeURI groupInfo.id}}">{{groupInfo.id}}</a></li>
+              <li class="list-group-item"><strong>Info:</strong> <pre><code class="json">{{json groupInfo }}</code></pre></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      {{/if}}
       <div class="tab-pane fade" id="tab2primary">
         <div class="jsoneditorx" id="jsoneditor" style="height:300px;"></div>
         <br />

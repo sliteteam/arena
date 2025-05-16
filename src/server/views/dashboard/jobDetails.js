@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const JobHelpers = require('../helpers/jobHelpers');
+const GroupHelpers = require('../helpers/groupHelpers');
 
 async function handler(req, res) {
   const {queueName, queueHost, id} = req.params;
@@ -43,6 +44,17 @@ async function handler(req, res) {
   if (!queue.IS_BEE) {
     const logs = await queue.getJobLogs(job.id);
     job.logs = logs.logs || 'No Logs';
+  }
+
+  let groupInfo = null;
+  // Check if the job belongs to a group (for BullMQ Pro)
+  if (queue.IS_BULLMQ_PRO && job.opts && job.opts.group) {
+    // Get information about the job's group
+    const groupId = job.opts.group.id;
+    groupInfo = await GroupHelpers.getGroupInfo(queue, groupId);
+
+    const jobsCount = await queue.getGroupJobsCount(groupId);
+    groupInfo.jobsCount = jobsCount;
   }
 
   if (queue.IS_BULLMQ) {
@@ -111,6 +123,7 @@ async function handler(req, res) {
     jobState,
     job,
     stacktraces,
+    groupInfo,
     hasFlows: Flows.hasFlows(),
   });
 }

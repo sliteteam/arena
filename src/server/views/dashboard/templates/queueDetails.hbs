@@ -19,7 +19,12 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <div class="js-toggle-add-job-editor btn btn-default btn-xs pull-right">Add Job</div>
-        <h4 class="panel-title">Job Types</h4>
+        <h4 class="panel-title">
+          Job Types
+          {{#if groups}}
+            <span class="text-muted">(Non-group related)</span>
+          {{/if}}
+        </h4>
       </div>
       <div class="panel-body">
         <div class="jsoneditorx form-group hide overflow-hidden">
@@ -88,6 +93,46 @@
     </div>
   </div>
 </div>
+
+{{#if groups}}
+<div class="row">
+  <div class="col-sm-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">Groups ({{ groupsCount }})</h4>
+      </div>
+      <div class="panel-body">
+        {{#if groups.length}}
+        <ul class="list-group">
+          {{#each groups}}
+          <li class="list-group-item">
+            <a href="{{ ../basePath }}/{{ encodeURI ../queueHost }}/{{ encodeURI ../queueName }}/groups/{{encodeURI this.id}}">
+              Group: <strong>{{this.id}}</strong>
+            </a>
+            <div style="margin-top: 5px;">
+              <span class="badge" 
+                style="margin-right: 3px;{{#eq this.status 'maxed'}}background-color: #d9534f;{{/eq}}
+                        margin-right: 3px;{{#eq this.status 'limited'}}background-color: #f0ad4e;{{/eq}}
+                        margin-right: 3px;{{#eq this.status 'paused'}}background-color: #5bc0de;{{/eq}}
+                        margin-right: 3px;{{#eq this.status 'waiting'}}background-color: #5cb85c;{{/eq}}"
+              >
+                <span class="text-capitalize">{{this.status}}</span>: {{this.count}}
+              </span>
+            </div>
+          </li>
+          {{/each}}
+        </ul>
+        {{else}}
+        <p>No groups found in this queue.</p>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>
+{{else}}
+<!-- This part can be shown if groups is null (e.g. not a pro feature or error fetching) -->
+<!-- <p>Group information is not available for this queue.</p> -->
+{{/if}}
 
 {{#contentFor 'sidebar'}}
 <li><a href="{{ basePath }}/">Queues Overview</a></li>

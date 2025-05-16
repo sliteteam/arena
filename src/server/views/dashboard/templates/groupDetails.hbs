@@ -1,0 +1,201 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h2>
+      <a href="{{basePath}}/{{encodeURI queueHost}}/{{encodeURI queueName}}" class="btn btn-default btn-sm pull-right">
+        <span class="glyphicon glyphicon-arrow-left"></span> Back to Queue
+      </a>
+      Jobs in Group <code>{{groupId}}</code>
+      <small class="text-muted">Queue: <code>{{queueHost}}/{{queueName}}</code></small>
+    </h2>
+  </div>
+</div>
+
+<!-- Group Status Information Panel -->
+<div class="row">
+  <div class="col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <span class="label {{#eq groupStatus 'maxed'}}label-danger{{/eq}}
+                             {{#eq groupStatus 'limited'}}label-warning{{/eq}}
+                             {{#eq groupStatus 'paused'}}label-info{{/eq}}
+                             {{#eq groupStatus 'waiting'}}label-success{{/eq}}
+                             {{#eq groupStatus 'unknown'}}label-default{{/eq}}">
+            {{groupStatus}}
+          </span>
+          Group Status and Configuration
+        </h4>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="well well-sm">
+              <h5><strong>Status</strong></h5>
+              <p>
+                {{#eq groupStatus 'maxed'}}Group has reached its concurrency limit{{/eq}}
+                {{#eq groupStatus 'limited'}}Group is rate-limited{{/eq}}
+                {{#eq groupStatus 'paused'}}Group is currently paused{{/eq}}
+                {{#eq groupStatus 'waiting'}}Group is working normally{{/eq}}
+                {{#eq groupStatus 'unknown'}}Status information not available{{/eq}}
+              </p>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="well well-sm">
+              <h5><strong>Jobs Count</strong></h5>
+              <p><span class="badge">{{jobsInGroupCount}}</span> total jobs in this group</p>
+            </div>
+          </div>
+          {{#if groupActiveCount}}
+          <div class="col-sm-4">
+            <div class="well well-sm">
+              <h5><strong>Active Jobs</strong></h5>
+              <p><span class="badge">{{groupActiveCount}}</span> currently running</p>
+            </div>
+          </div>
+          {{/if}}
+        </div>
+        
+        <div class="row">
+          {{#if groupConcurrency}}
+          <div class="col-sm-4">
+            <div class="well well-sm">
+              <h5><strong>Concurrency</strong></h5>
+              <p>Limit: <span class="badge">{{groupConcurrency}}</span> jobs at once</p>
+            </div>
+          </div>
+          {{/if}}
+          
+          {{#if groupRateLimit}}
+          <div class="col-sm-8">
+            <div class="well well-sm">
+              <h5><strong>Rate Limit</strong></h5>
+              <p>Maximum <span class="badge">{{groupRateLimit.max}}</span> jobs per <span class="badge">{{groupRateLimit.duration}}</span>ms</p>
+            </div>
+          </div>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{#if groupMeta}}
+<div class="row">
+  <div class="col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">Group Metadata</h4>
+      </div>
+      <div class="panel-body">
+        <pre class="pre-scrollable">{{json groupMeta true}}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+{{/if}}
+
+<!-- Jobs List -->
+<div class="row">
+  <div class="col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-sm-6">
+            <h4 class="panel-title">Jobs</h4>
+          </div>
+          <div class="col-sm-6 text-right">
+            {{#if jobs.length}}
+              <span class="text-muted">Showing {{jobs.length}} of {{jobsInGroupCount}} jobs</span>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+      <div class="panel-body">
+        {{#if jobs.length}}
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Timestamp</th>
+                  <th>Attempts</th>
+                  <th>Delay</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each jobs}}
+                  {{#if this}}
+                    <tr>
+                      <td>
+                        <!-- Store basePath in a variable that can be accessed within the each loop context -->
+                        {{#with ../this}}
+                        <a href="{{basePath}}/{{encodeURI queueHost}}/{{encodeURI queueName}}/{{../this.id}}">
+                          {{../this.id}}
+                        </a>
+                        {{/with}}
+                      </td>
+                      <td>{{this.name}}</td>
+                      <td>{{moment this.timestamp "llll"}}</td>
+                      <td>{{this.attemptsMade}}</td>
+                      <td>{{this.delay}}</td>
+                    </tr>
+                  {{else}}
+                    <tr><td colspan="8">Error: Job data not available.</td></tr>
+                  {{/if}}
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          {{#if pages.length}}
+          <nav>
+            <ul class="pagination">
+              <li class="{{#eq currentPage 1}}disabled{{/eq}}">
+                <a href="?page={{subtract currentPage 1}}&pageSize={{pageSize}}" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              {{#each pages}}
+              <li class="{{#eq this ../currentPage}}active{{/eq}}">
+                <a href="?page={{this}}&pageSize={{../pageSize}}">{{this}}</a>
+              </li>
+              {{/each}}
+              <li class="{{#eq currentPage lastPage}}disabled{{/eq}}">
+                <a href="?page={{add currentPage 1}}&pageSize={{pageSize}}" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+          {{/if}}
+        {{else}}
+          <div class="alert alert-info">
+            <p>No jobs found in group <code>{{groupId}}</code>.</p>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>
+
+{{#contentFor 'sidebar'}}
+  <li><a href="{{basePath}}/">Queues Overview</a></li>
+  <li><a href="{{basePath}}/{{encodeURI queueHost}}/{{encodeURI queueName}}">Queue <code>{{queueHost}}/{{queueName}}</code></a></li>
+  <li class="active"><a href="#">Group <code>{{groupId}}</code></a></li>
+  {{#if hasFlows}}
+    <li><a href="{{basePath}}/flows/">Flows Overview</a></li>
+  {{/if}}
+{{/contentFor}}
+
+{{#contentFor 'script'}}
+  <script>
+    $(document).ready(function() {
+      // Initialize tooltips
+      $('[data-toggle="tooltip"]').tooltip();
+
+    });
+  </script>
+{{/contentFor}}
