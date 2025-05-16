@@ -1,3 +1,9 @@
+### [4.6.1](https://github.com/sliteteam/arena/compare/v4.6.0...v4.6.1) (2025-05-16)
+
+### Bug Fixes
+
+- `baseUrl` in groupDetails ([1138950](https://github.com/sliteteam/arena/commit/1138950127eb7469a1a72c5f4db16342108a4ecd))
+
 ## [4.6.0](https://github.com/sliteteam/arena/compare/v4.5.1...v4.6.0) (2025-05-16)
 
 ### Features
