@@ -201,12 +201,14 @@ $(document).ready(() => {
     const queueName = $(this).data('queue-name');
     const queueHost = $(this).data('queue-host');
     const queueState = $(this).data('queue-state');
+    const cleanAll = $(this).data('clean-all');
 
     let data = {
       queueName,
       action,
       jobs: [],
       queueState,
+      cleanAll,
     };
 
     if (action !== 'clean') {
@@ -220,11 +222,12 @@ $(document).ready(() => {
       });
     }
 
-    const count = action === 'clean' ? 1000 : data.jobs.length;
+    const count =
+      action === 'clean' ? (cleanAll ? 'all failed' : 1000) : data.jobs.length;
 
     const r = window.confirm(
       `${capitalize(action)} ${count} ${
-        count > 1 ? 'jobs' : 'job'
+        cleanAll ? 'jobs' : count > 1 ? 'jobs' : 'job'
       } in queue "${queueHost}/${queueName}"?`
     );
     if (r) {

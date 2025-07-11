@@ -16,7 +16,7 @@ function bulkAction(action) {
     const queue = await Queues.get(queueName, queueHost);
     if (!queue) return res.status(404).send({error: 'queue not found'});
 
-    const {jobs, queueState} = req.body;
+    const {jobs, queueState, cleanAll} = req.body;
 
     try {
       if (!_.isEmpty(jobs) && jobs.length > 0) {
@@ -40,7 +40,13 @@ function bulkAction(action) {
         await Promise.all(actionPromises);
         return res.sendStatus(200);
       } else if (action === 'clean') {
-        await queue.clean(1000, queueState);
+        if (cleanAll) {
+          // Clean all failed jobs
+          await queue.clean(0, 0, 'failed');
+        } else {
+          // Clean 1000 jobs of the current state
+          await queue.clean(1000, queueState);
+        }
         return res.sendStatus(200);
       }
     } catch (e) {
